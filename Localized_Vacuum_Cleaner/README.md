@@ -1,24 +1,21 @@
-# Mobile_Robotics_Practices
-## FollowLine
-![formula1_2](https://github.com/Ruben249/practicas_robotica_movil/assets/102288264/72c70306-f304-45d8-b8c0-ae663498c6cb)
+# Service_Robotics_Practices
+## Localized Vacuum Cleaner
+
+![Portada](https://github.com/user-attachments/assets/48d01426-4d08-47a6-8321-2a3bc9dcf54e)
 
 ### Index
 
 -[Start](#start)
 
+
 -[Development](#development)
 
 #### Start
-At the beginning I was testing how to use the commands provided in the robot API.
-Thanks to the advice provided by the teachers, we discovered that we should start by obtaining the image of the robot, converting all the reds to a single red, while the rest of the colors should be converted to black. In the following images we see an example of obtaining the photo.
-Natural image
-![Image1](https://github.com/Ruben249/practicas_robotica_movil/assets/102288264/fcb06fba-9b7c-435b-a7cf-f77bf3180b3a)
 
-Black and red image 
-![Image2](https://github.com/Ruben249/practicas_robotica_movil/assets/102288264/51632b58-ceb5-4d66-b55a-bfca80a0a929)
+To start with this practice, it is necessary to transform the coordinates of the world with those of the robot.
+To do this, I moved the robot in Gazebo to the first white pixel on the map, which is the top left corner, and wrote down the coordinates it returned. I also moved the robot to the last white pixel on the map, the bottom right corner, and wrote down the coordinates. I did the same with some other points on the map in order to get a correlation. To do this calculation, I used the transformation matrix provided:
+![image](https://github.com/user-attachments/assets/71623fa5-b5c0-4308-824c-194167d08119)
 
-Then I decided to add a small blue dot in the middle of what the robot sees to help me do the calculations correctly, then I removed it. To do this I simply had to divide the width and length of the image by 2. 
-![Image3](https://github.com/Ruben249/practicas_robotica_movil/assets/102288264/095b31ae-c7c4-48e9-b17c-da82af9bdf45)
 
 #### Development
 
