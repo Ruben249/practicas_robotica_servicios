@@ -13,6 +13,8 @@
 
 -[Errors](#errors)
 
+-[Video](#video)
+
 #### Start
 
 To start with this practice, it is necessary to transform the coordinates of the world with those of the robot.
@@ -39,5 +41,10 @@ I did the same with some other points on the map in order to get a correlation. 
 Here is a video where we briefly see how the car behaves.
 
 #### Errors
+
+-When doing the transformation to find the correlation between the coordinates on the map and those of the robot, one problem I had was that when I moved the robot, it was represented inversely on the map, like a mirror image.
+
+#### Video 
+
 [FollowLine_Simple.webm](https://github.com/Ruben249/practicas_robotica_movil/assets/102288264/2c9a9c66-92af-472b-bf55-7fa6d0fcbe95)
 
