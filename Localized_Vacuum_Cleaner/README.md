@@ -25,7 +25,7 @@ def first_white(map):
     """ first_white is a function that iterates over the image to find the first white pixel (255, 255, 255). """
     for y in range(map.shape[0]):
         for x in range(map.shape[1]):
-            # Chexk if the pixel is white
+            # Check if the pixel is white
             if np.array_equal(map[y, x], [255, 255, 255]):
                 return x, y
     return None
