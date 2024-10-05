@@ -53,6 +53,20 @@ def draw_robot():
 ```
 
 Once we got from the robot coordinates to the map coordinates, we had to divide the map into cells and calculate the best route according to the BSA algorithm(Backtracking Spiral Algorithm).
+
+![Grid](https://github.com/user-attachments/assets/d0b851bb-dcbb-41b1-abcb-e5d2a829178d)
+
+I have made this grid by dividing the map into 15X15 cells. The function to see it is the following:
+```python
+# Function to draw grid on the resized map
+def draw_grid(image, cell_size):
+    # Iterate over the image dimensions and draw lines for the grid
+    for x in range(0, image.shape[1], cell_size):
+        cv2.line(image, (x, 0), (x, image.shape[0]), (0, 255, 0), 1)  # Vertical green lines
+    for y in range(0, image.shape[0], cell_size):
+        cv2.line(image, (0, y), (image.shape[1], y), (0, 255, 0), 1)  # Horizontal green lines
+```
+
 Based on this algorithm, at each position we have 4 neighbours, north, east, south and west. We have to take one of those neighbours to move forward and prioritise them in that order. We have to go north, if not we have to go east, if not we have to go south and if not we have to go west. 
 
 
