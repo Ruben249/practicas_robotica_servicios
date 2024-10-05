@@ -74,6 +74,11 @@ Based on this algorithm, at each position we have 4 neighbours, north, east, sou
 
 -When doing the transformation to find the correlation between the coordinates on the map and those of the robot, one problem I had was that when I moved the robot, it was represented inversely on the map, like a mirror image. I solved it by inverting the x-axis.
 
+
+-Once I had the cells and the BGS algorithm done, I forgot to take into account that I only had to go through the cells that were on white pixels, so I calculated the path over the whole map, generating this image:
+![image](https://github.com/user-attachments/assets/198e25a9-15cd-4473-b2f1-256a09be7cef)
+
+
 #### Video 
 Here is a video where we briefly see how the car behaves.
 [FollowLine_Simple.webm](https://github.com/Ruben249/practicas_robotica_movil/assets/102288264/2c9a9c66-92af-472b-bf55-7fa6d0fcbe95)
