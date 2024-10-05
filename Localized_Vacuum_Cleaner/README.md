@@ -76,7 +76,13 @@ Based on this algorithm, at each position we have 4 neighbours, north, east, sou
 
 
 -Once I had the cells and the BGS algorithm done, I forgot to take into account that I only had to go through the cells that were on white pixels, so I calculated the path over the whole map, generating this image:
+
 ![image](https://github.com/user-attachments/assets/198e25a9-15cd-4473-b2f1-256a09be7cef)
+
+To solve this, I created an array with only the navigable cells, so that the BGS algorithm only does it on it. To refine it, I made all cells that had a black pixel non-navigable. Here is the result:
+
+![Path](https://github.com/user-attachments/assets/670c01f9-24ad-4aca-8680-0b07bcfd7148)
+
 
 
 #### Video 
