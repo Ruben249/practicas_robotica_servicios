@@ -83,6 +83,12 @@ To solve this, I created an array with only the navigable cells, so that the BGS
 
 ![Path](https://github.com/user-attachments/assets/670c01f9-24ad-4aca-8680-0b07bcfd7148)
 
+As you can see in the photo, when I calculate the path there are some places that are not painted. These are the points where I do the backtracking. I solved this problem by adding this point to the array, because before I didn't add it, and I have made the red squares smaller to see the cells well, and this is how it looks:
+
+![GOOD-PATH](https://github.com/user-attachments/assets/f28340e2-a560-49e3-9ab7-82db8ce18a67)
+
+
+-Another problem I had was that when calculating the path, it kept overwriting itself when doing the backtrackin, so in the end it detected that I had already finished navigating. By changing this, every time I had to do the backtracking to another point, it started to navigate. To solve these problems, I created a ‘security’ array with which I saved the whole path every time I did bactracking.
 
 
 #### Video 
