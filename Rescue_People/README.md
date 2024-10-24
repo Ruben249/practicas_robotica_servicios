@@ -63,15 +63,29 @@ When a face is detected, the drone give us his coordinates.
 ##### Battery Management: 
 The drone monitors its battery level and logs a 50% warning after 4 minutes. After 8 minutes, the drone returns to the base automatically.
 
+#### Coordinates tranformation
+For this exercise it is necessary to show the location of people at sea. Then, the Gazebo transformation has to be made with respect to altitude and latitude.
+
+```python
+if is_new_detection(pos):
+    detected_people_positions.append(pos)
+    people_count += 1
+    utm_coords = update_utm_with_robot_position(utm_boat)
+    print(f"Person {people_count} detected at UTM position X: {utm_coords[0]}, Y: {utm_coords[1]}")
+```
+
 #### Errors
 
 -The main problem I had was that even if the drone was above a person, it didn't detect the face, because to detect the face it needs to see it at a certain angle. So my initial solution was that, using opencv, when it detects a colour other than blue, the drone starts to rotate around itself to find that angle. That solution took a long time, so I decided that instead of rotating the drone, the most practical thing to do was to rotate the image, so I changed the system.
 
+-A very important error I had was that due to the high demand of computer resources, the image was out of phase with respect to the drone, and there were even times when the drone passed over a person, and it did not appear in the image. This has delayed the development of the exercise a lot, added to the fact that practically after each execution, the docker had to be restarted.
+
 
 #### Videos
-Here is a video where we briefly see how the drone behaves.
+Here is the link to the video of the drone's behaviour
 
-[FollowLine_Simple.webm](https://github.com/Ruben249/practicas_robotica_movil/assets/102288264/2c9a9c66-92af-472b-bf55-7fa6d0fcbe95)
+https://youtu.be/BdDdAW7zDIQ
+
 
 In this video we can observe the behaviour of the drone with a one-minute battery:
 
