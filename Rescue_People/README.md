@@ -12,7 +12,7 @@
 
 -[Errors](#errors)
 
--[Video](#video)
+-[Videos](#videos)
 
 #### Start
 
@@ -68,8 +68,12 @@ The drone monitors its battery level and logs a 50% warning after 4 minutes. Aft
 -The main problem I had was that even if the drone was above a person, it didn't detect the face, because to detect the face it needs to see it at a certain angle. So my initial solution was that, using opencv, when it detects a colour other than blue, the drone starts to rotate around itself to find that angle. That solution took a long time, so I decided that instead of rotating the drone, the most practical thing to do was to rotate the image, so I changed the system.
 
 
-#### Video 
+#### Videos
 Here is a video where we briefly see how the drone behaves.
 
 [FollowLine_Simple.webm](https://github.com/Ruben249/practicas_robotica_movil/assets/102288264/2c9a9c66-92af-472b-bf55-7fa6d0fcbe95)
+
+In this video we can observe the behaviour of the drone with a one-minute battery:
+
+https://youtu.be/tA4a2U7SKSI
 
