@@ -1,7 +1,7 @@
 # Service_Robotics_Practices
-## Rescue People
+## Autoparking
 
-![Portada](https://github.com/user-attachments/assets/4aeba2e1-0fd1-4afe-a973-f48dc1b2ca09)
+![Portada](https://github.com/user-attachments/assets/599d01b8-2952-401d-b8ba-48d58bdce6a7)
 
 
 ### Index
@@ -16,69 +16,79 @@
 
 #### Start
 
-To start with this practice, the first thing to do is to get the drone off the ground. Afterwards, we send it to the centre of the accident and make it do spirals so that it detects faces and tells us its position.
+To start with this practice, it is necessary to identify on which side the parking lot is located. To do this, you need to collect the data from the lasers and identify on which side the parked cars are parked.
+Here is the API on how to use the laser:
 
-The drone uses OpenCV to convert the image to grayscale, detects faces using a pre-trained Haar Cascade classifier, and logs the coordinates of the detection.
+```python
+HAL.getFrontLaserData() # to obtain the front laser sensor data It is composed of 180 pairs of values: (0-180º distance in millimeters)
+HAL.getRightLaserData() # to obtain the right laser sensor data It is composed of 180 pairs of values: (0-180º distance in millimeters)
+HAL.getBackLaserData() # to obtain the back laser sensor data It is composed of 180 pairs of values: (0-180º distance in millimeters)
+```
+
+To tackle the exercise, I have created a state machine, each state being a phase of the car park.
+```python
+class States:
+    CHECK_SIDE = 0
+    CHECK_DISTANCE = 1
+    APPROACH = 2
+    ALIGN = 3
+    FIND_SPOT = 4
+    MOVE_TO_SPOT_END = 5
+    PARKING_MANEUVER_STEP1 = 6
+    PARKING_MANEUVER_STEP2 = 7
+    PARKING_MANEUVER_STEP3 = 8
+    STOP = 9
+```
 
 #### Development
 
-This practice is divided into two major components: navigation and face detection.
-
-##### Navigation: 
-The drone navigates using a spiral pattern around a defined center. The following function generates waypoints for the spiral:
-
+Once we have identified the parking side, we have to centre the car on the road. To do this, we take the point furthest from the car and calculate the distance with:
 ```python
-
-def generate_spiral_waypoints(center_x, center_y, initial_radius, waypoint_count):
-    waypoints = []
-    for turn in range(waypoint_count):
-        angle = 2 * math.pi * turn / 8
-        radius = initial_radius - (initial_radius / waypoint_count) * turn
-        waypoint_x = center_x + radius * math.cos(angle)
-        waypoint_y = center_y + radius * math.sin(angle)
-        waypoints.append((waypoint_x, waypoint_y))
-    return waypoints
+for i in range(180):
+        dist = laser_data.values[i]
+        angle = math.radians(i - 90)
+        laser_polar.append((dist, angle))
+        x = dist * math.cos(angle)
+        y = dist * math.sin(angle)
+        laser_xy.append((x, y))
 ```
-The drone follows these waypoints to cover the search area effectively. Once all waypoints are visited, it returns to the base.
 
-##### Face Detection:
-While following the waypoints, the drone constantly analyzes images from its ventral camera. IThe image you receive looks like this:
+##### Step1
+By taking out the distance, we make the car turn and move forward slowly until the distance between the car and the previously chosen point is less than 2 metres.
+![Paso1](https://github.com/user-attachments/assets/b779a6c8-d0f4-48bb-905d-99af1efcc6f6)
 
-![mar](https://github.com/user-attachments/assets/bf41472b-e18a-4d59-ae46-b6adcd05264b)
+##### Step2
+![Paso2](https://github.com/user-attachments/assets/8e1ac54f-239a-4557-a3c8-2073368fbe20)
 
-In this case it would only detect the face that looks straight and in the normal orientation of a face. That is why I decided to rotate the image
+##### Step3
+When the distance is the desired one, we create a straight line between two points, those points will be the one after a measurement at infinity and the one before another measurement at infinity, we calculate the x of each one and we subtract it, that will be the deviation. We make the car move forward and turn in the other direction until this difference is close to 0.
 
-```python
+![Paso3](https://github.com/user-attachments/assets/7182e81d-7a59-4ff1-9b32-148dfc24af9f)
 
-# Rotate an image by a given angle
-def rotate_image(image, angle):
-    (h, w) = image.shape[:2]
-    center = (w // 2, h // 2)
-    rotation_matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
-    rotated_image = cv2.warpAffine(image, rotation_matrix, (w, h))
-    return rotated_image
-```
-When a face is detected, the drone give us his coordinates.
+Here is a picture of what the laser looks like with the cars in parallel and what it looks like when the car approaches them and has to straighten up:
 
-##### Battery Management: 
-The drone monitors its battery level and logs a 50% warning after 4 minutes. After 8 minutes, the drone returns to the base automatically.
+Laser at step 1
+![LStep1](https://github.com/user-attachments/assets/6d2e4f6c-feb3-48f6-8aeb-64abb3cf1d2f)
 
-#### Coordinates tranformation
-For this exercise it is necessary to show the location of people at sea. Then, the Gazebo transformation has to be made with respect to altitude and latitude.
+Laser at step 2
+![LStep2](https://github.com/user-attachments/assets/1a956a5e-3706-4acc-b8ec-d06c7d732985)
 
-```python
-if is_new_detection(pos):
-    detected_people_positions.append(pos)
-    people_count += 1
-    utm_coords = update_utm_with_robot_position(utm_boat)
-    print(f"Person {people_count} detected at UTM position X: {utm_coords[0]}, Y: {utm_coords[1]}")
-```
+Laser at step 3
+![LStep3](https://github.com/user-attachments/assets/d6aceade-c152-4624-8d1d-319382244119)
+
+We can see the above. We can see how at the beginning the car is further away from the parked cars, we can see how the inclination increases between the points where there are parked cars because the car is getting closer, and then we can see how the car corrects the direction and gets parallel and closer to the other cars. 
+
+##### Step4
+The next step is to find an available parking space. To do this I have decided to
+
+
 
 #### Errors
 
--The main problem I had was that even if the drone was above a person, it didn't detect the face, because to detect the face it needs to see it at a certain angle. So my initial solution was that, using opencv, when it detects a colour other than blue, the drone starts to rotate around itself to find that angle. That solution took a long time, so I decided that instead of rotating the drone, the most practical thing to do was to rotate the image, so I changed the system.
+-One error I encountered was that the vehicle failed to line up correctly with the line of cars. The incorrect orientation affected the accuracy in detecting gaps and moving in a straight line.
+To solve this I implemented an alignment logic that adjusted the rotation of the vehicle until the difference in the x-coordinates of the detected points was close to zero, meaning that the vehicle was parallel to the cars.
 
--A very important error I had was that due to the high demand of computer resources, the image was out of phase with respect to the drone, and there were even times when the drone passed over a person, and it did not appear in the image. This has delayed the development of the exercise a lot, added to the fact that practically after each execution, the docker had to be restarted.
+-Another problem I had was finding the right value for the constants, because if I changed them slightly, the car would crash into parked cars or turn too much and drift away from the cars. 
 
 
 #### Videos
