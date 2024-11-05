@@ -33,10 +33,10 @@ class States:
     APPROACH = 2
     ALIGN = 3
     FIND_SPOT = 4
-    MOVE_TO_SPOT_END = 5
-    PARKING_MANEUVER_STEP1 = 6
-    PARKING_MANEUVER_STEP2 = 7
-    PARKING_MANEUVER_STEP3 = 8
+    ADVANCE_TURN = 5
+    REVERSE_TURN_1 = 6
+    REVERSE_TURN_2 = 7
+    FINAL_FORWARD = 8
     STOP = 9
 ```
 
@@ -79,7 +79,7 @@ Laser at step 3
 We can see the above. We can see how at the beginning the car is further away from the parked cars, we can see how the inclination increases between the points where there are parked cars because the car is getting closer, and then we can see how the car corrects the direction and gets parallel and closer to the other cars. 
 
 ##### Step4
-The next step is to find an available parking space. To do this I have decided to
+The next step is to find an available parking space. To do this, I followed the typical manoeuvres performed in normal driving. First I go over the gap, then I back up turning to the right, when I've got the back of the car in, we turn left, and finally we go straight ahead and turn to the centre. To do this, I have been checking how far the car and the yaw have moved forward.
 
 
 
@@ -90,14 +90,19 @@ To solve this I implemented an alignment logic that adjusted the rotation of the
 
 -Another problem I had was finding the right value for the constants, because if I changed them slightly, the car would crash into parked cars or turn too much and drift away from the cars. 
 
+-A recurring error I had was that when turning, the car stopped moving when it was close to another car, but it was not crashing, so I had to restart the computer and change the constants a little bit.
 
+-Another problem that took up a lot of my time was figuring out the angles and speeds needed to perform the parking manoeuvre correctly.
 #### Videos
-Here is the link to the video of the drone's behaviour
+In this first video we see how the car behaves when we have all the cars, just as the world is without touching anything:
 
-https://youtu.be/BdDdAW7zDIQ
+[https://youtu.be/BdDdAW7zDIQ](https://youtu.be/1HeZRPQvYYM)
 
+In the following video, we remove the cars in front of our car from the world, i.e. we remove the cars in front of us:
 
-In this video we can observe the behaviour of the drone with a one-minute battery:
+[https://youtu.be/tA4a2U7SKSI](https://youtu.be/_r4x2ddXYe4)
 
-https://youtu.be/tA4a2U7SKSI
+In this last video we make a bigger space to be able to park without a car behind. To do this, when looking for a parking space, we remove the car behind:
+
+https://youtu.be/07b0AqKpK5s
 
