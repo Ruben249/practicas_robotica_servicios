@@ -1,7 +1,8 @@
 # Service_Robotics_Practices
 ## Amazon Warehouse 
 
-![Portada](https://github.com/user-attachments/assets/599d01b8-2952-401d-b8ba-48d58bdce6a7)
+![Portada](https://github.com/user-attachments/assets/1df065f8-d6d0-4e04-a78c-35a273cc4861)
+
 
 
 ### Index
