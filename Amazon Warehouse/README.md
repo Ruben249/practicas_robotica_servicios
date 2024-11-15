@@ -17,29 +17,52 @@
 
 #### Start
 
-To start with this practice, it is necessary to identify on which side the parking lot is located. To do this, you need to collect the data from the lasers and identify on which side the parked cars are parked.
-Here is the API on how to use the laser:
 
-```python
-HAL.getFrontLaserData() # to obtain the front laser sensor data It is composed of 180 pairs of values: (0-180º distance in millimeters)
-HAL.getRightLaserData() # to obtain the right laser sensor data It is composed of 180 pairs of values: (0-180º distance in millimeters)
-HAL.getBackLaserData() # to obtain the back laser sensor data It is composed of 180 pairs of values: (0-180º distance in millimeters)
-```
+In this project, we need to convert between **pixel coordinates** on a 2D image (representing the warehouse map) and **world coordinates** (measured in meters) to accurately navigate the warehouse. The center of the map corresponds to the origin `(0, 0)` in world coordinates, with the positive y-axis pointing upward and the positive x-axis pointing to the left.
 
-To tackle the exercise, I have created a state machine, each state being a phase of the car park.
-```python
-class States:
-    CHECK_SIDE = 0
-    CHECK_DISTANCE = 1
-    APPROACH = 2
-    ALIGN = 3
-    FIND_SPOT = 4
-    ADVANCE_TURN = 5
-    REVERSE_TURN_1 = 6
-    REVERSE_TURN_2 = 7
-    FINAL_FORWARD = 8
-    STOP = 9
-```
+The problem statement provides the **real-world dimensions** of the warehouse:
+- **Warehouse Width**: 20.62 meters
+- **Warehouse Height**: 13.6 meters
+
+These values are stored as constants and allow us to calculate the **scaling factors** to translate between pixels and meters.
+
+##### Step-by-Step Conversion Process
+
+1. **Map Dimensions in Pixels**:
+   We load the map as an image, where each pixel represents a small area of the warehouse. From the image data, we retrieve the map’s width and height in pixels (e.g., `image_width`, `image_height`).
+
+2. **Calculate Scale Factors**:
+   To determine how much each pixel represents in meters, we divide the warehouse's real-world dimensions by the map dimensions in pixels:
+   - `scale_x = MAP_WIDTH / image_width`: This factor tells us how many meters each horizontal pixel represents.
+   - `scale_y = MAP_HEIGHT / image_height`: This factor tells us how many meters each vertical pixel represents.
+
+3. **Determine the Center of the Map**:
+   The origin `(0, 0)` of the world coordinates is set at the center of the map. In pixel coordinates, this center is located at:
+   - `center_x = image_width / 2`
+   - `center_y = image_height / 2`
+
+4. **Convert Pixel Coordinates to World Coordinates**:
+   To convert from pixel coordinates `(y_pixel, x_pixel)` to world coordinates `(world_y, world_x)`, we calculate the offset of each pixel from the center and then multiply by the scale factors:
+   - `world_y = (center_y - y_pixel) * scale_y`: Calculates the vertical world position. The `center_y - y_pixel` part gives the distance from the center, and multiplying by `scale_y` converts it to meters.
+   - `world_x = (center_x - x_pixel) * scale_x`: Calculates the horizontal world position. The `center_x - x_pixel` part gives the horizontal distance from the center, and multiplying by `scale_x` converts it to meters.
+
+### Interpreting the Conversion Results
+
+Below are the results for the four corners of the map, with their pixel coordinates converted to world coordinates. These values help us understand the physical layout of the map in the warehouse:
+
+| Pixel Coordinates | World Coordinates (Meters) | Explanation |
+|-------------------|----------------------------|-------------|
+| `(0, 0)`          | `(6.8, 10.31)`            | **Top-left corner** in pixels corresponds to the **top-right** in the world, as both `y` and `x` are positive. The `y` position is high (6.8 meters from the center), and `x` is 10.31 meters from the center, indicating the right side of the map. |
+| `(278, 0)`        | `(-6.75, 10.31)`          | **Bottom-left corner** in pixels converts to **top-left** in the world. The negative `y` value (`-6.75`) shows it’s below the center vertically, while `x = 10.31` meters shows it’s still on the right side horizontally. |
+| `(0, 414)`        | `(6.8, -10.26)`           | **Top-right corner** in pixels corresponds to the **bottom-right** in world coordinates. The positive `y` value (`6.8`) shows it’s above the center, and the negative `x` value (`-10.26`) indicates it’s on the left side of the map horizontally. |
+| `(278, 414)`      | `(-6.75, -10.26)`         | **Bottom-right corner** in pixels converts to **bottom-left** in the world. Both `y` and `x` are negative, indicating it is below the center vertically and to the left horizontally. |
+
+These world coordinates give us the precise real-world locations of the map's corners relative to the warehouse center, allowing for accurate positioning and navigation within the simulated environment.
+
+With these results, we see that the map changes x and y:
+![grafica](https://github.com/user-attachments/assets/aad85ac5-1e56-4572-9ffc-aee6607c895f)
+
+
 
 #### Development
 
