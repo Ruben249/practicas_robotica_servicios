@@ -15,7 +15,7 @@
 
 -[Videos](#videos)
 
-#### Start
+### Start
 
 
 In this project, we need to convert between **pixel coordinates** on a 2D image (representing the warehouse map) and **world coordinates** (measured in meters) to accurately navigate the warehouse. The center of the map corresponds to the origin `(0, 0)` in world coordinates, with the positive y-axis pointing upward and the positive x-axis pointing to the left.
@@ -64,69 +64,66 @@ With these results, we see that the map changes x and y:
 
 
 
-#### Development
+### Development
+The practice provides us with the coordinates of the shelves, which are as follows
+Shelves coordinates = {
+    1: (3.728, 0.579),
+    2: (3.728, -1.242),
+    3: (3.728, -3.039),
+    4: (3.728, -4.827),
+    5: (3.728, -6.781),
+    6: (3.728, -8.665),
+}
+##### Expand the obstacles
+As I explained before, the map is rotated, so the x-values are the y-values and vice versa.
 
-Once we have identified the parking side, we have to centre the car on the road. To do this, we take the point furthest from the car and calculate the distance with:
+To ensure safety, I had to create a black and white map, where the black pixels are obstacles. To make it difficult to crash, I have expanded the obstacles.
+
+##### Calculate the path
+Once we have the map ready and the coordinate conversion functions in place, it is necessary to calculate the path. The practice provides us with OMPL functions, of which the one that needs to be changed the most isStateValid.
+In this function it is necessary to make that it can only pass through the white spaces where there is enough space for the robot to pass, but it must also take into account if the robot carries or not the shelf, because if it carries the shelf it increases its dimensions.
+
+##### Navigate
+Now that we have calculated the path, we have to navigate. There are several aspects to take into consideration:
+
+-Before moving the robot, we first obtain its current position and orientation using `HAL.getPose3d()`. This function provides the robot's current coordinates (`x`, `y`) and its orientation (`yaw`).
 ```python
-for i in range(180):
-        dist = laser_data.values[i]
-        angle = math.radians(i - 90)
-        laser_polar.append((dist, angle))
-        x = dist * math.cos(angle)
-        y = dist * math.sin(angle)
-        laser_xy.append((x, y))
+robot_pose = HAL.getPose3d()  # Get the current pose of the robot
+current_x = robot_pose.x
+current_y = robot_pose.y
+current_yaw = robot_pose.yaw
 ```
 
-##### Step1
-By taking out the distance, we make the car turn and move forward slowly until the distance between the car and the previously chosen point is less than 2 metres.
-![Paso1](https://github.com/user-attachments/assets/b779a6c8-d0f4-48bb-905d-99af1efcc6f6)
+-We compute the angle to the target using the atan2 function, which returns the angle between the robot's current position and the target. Then, we calculate the difference between this angle and the robot's current orientation (`current_yaw`).
 
-##### Step2
-![Paso2](https://github.com/user-attachments/assets/8e1ac54f-239a-4557-a3c8-2073368fbe20)
+-Next, we calculate the displacement (`delta_x`, `delta_y`) between the current position and the target position (`target_x`, `target_y`). The distance to the target is then calculated using the Euclidean distance formula.
 
-##### Step3
-When the distance is the desired one, we create a straight line between two points, those points will be the one after a measurement at infinity and the one before another measurement at infinity, we calculate the x of each one and we subtract it, that will be the deviation. We make the car move forward and turn in the other direction until this difference is close to 0.
+-We compute the angle to the target using the atan2 function, which returns the angle between the robot's current position and the target. Then, we calculate the difference between this angle and the robot's current orientation (`current_yaw`).
 
-![Paso3](https://github.com/user-attachments/assets/7182e81d-7a59-4ff1-9b32-148dfc24af9f)
+-If the angle difference (`angle_diff`) is greater than a threshold (e.g., 0.1 radians), the robot will rotate towards the target. Otherwise, it will move forward. The robot adjusts its rotation speed (HAL.setW()) to align with the target angle.
+```python
+if abs(angle_diff) > 0.1:
+    HAL.setV(0)  # Stop moving forward
+    HAL.setW(angle_diff * 0.5)  # Rotate towards the target
+else:
+    HAL.setW(0)  # Stop rotating
+    HAL.setV(min(max_speed, distance * acceleration))  # Move towards the target
+```
 
-Here is a picture of what the laser looks like with the cars in parallel and what it looks like when the car approaches them and has to straighten up:
+-Finally, we check if the robot has reached the target by comparing the distance to the target (`distance`). If the distance is below a certain threshold (e.g., 0.1), the robot stops.
 
-Laser at step 1
-![LStep1](https://github.com/user-attachments/assets/6d2e4f6c-feb3-48f6-8aeb-64abb3cf1d2f)
+##### Return
+Once we have navigated to the shelf, the isStateValid function needs to be adjusted, as the dimensions of the robot change and it cannot pass through the same places. To do this, remove the legs from the shelf, painting everything white. Subsequently the drone will recalculate the route. 
 
-Laser at step 2
-![LStep2](https://github.com/user-attachments/assets/1a956a5e-3706-4acc-b8ec-d06c7d732985)
+### Errors
 
-Laser at step 3
-![LStep3](https://github.com/user-attachments/assets/d6aceade-c152-4624-8d1d-319382244119)
-
-We can see the above. We can see how at the beginning the car is further away from the parked cars, we can see how the inclination increases between the points where there are parked cars because the car is getting closer, and then we can see how the car corrects the direction and gets parallel and closer to the other cars. 
-
-##### Step4
-The next step is to find an available parking space. To do this, I followed the typical manoeuvres performed in normal driving. First I go over the gap, then I back up turning to the right, when I've got the back of the car in, we turn left, and finally we go straight ahead and turn to the centre. To do this, I have been checking how far the car and the yaw have moved forward.
+-One of the errors I have had is that sometimes, when calculating the path, it would calculate an imprecise and very short one, so I have made it calculate 3 paths and do the one that is longer.
 
 
+![Intentos](https://github.com/user-attachments/assets/8d60a86c-1c22-4427-8d3c-3aa506bb6541)
 
-#### Errors
 
--One error I encountered was that the vehicle failed to line up correctly with the line of cars. The incorrect orientation affected the accuracy in detecting gaps and moving in a straight line.
-To solve this I implemented an alignment logic that adjusted the rotation of the vehicle until the difference in the x-coordinates of the detected points was close to zero, meaning that the vehicle was parallel to the cars.
+-Another mistake I had was that when I got to the furthest shelf, when I came back I calculated the route by bypassing the other shelves. For this, I made the shelf bigger so that I couldn't fit through the spaces under the shelves.
 
--Another problem I had was finding the right value for the constants, because if I changed them slightly, the car would crash into parked cars or turn too much and drift away from the cars. 
 
--A recurring error I had was that when turning, the car stopped moving when it was close to another car, but it was not crashing, so I had to restart the computer and change the constants a little bit.
-
--Another problem that took up a lot of my time was figuring out the angles and speeds needed to perform the parking manoeuvre correctly.
 #### Videos
-In this first video we see how the car behaves when we have all the cars, just as the world is without touching anything:
-
-[https://youtu.be/BdDdAW7zDIQ](https://youtu.be/1HeZRPQvYYM)
-
-In the following video, we remove the cars in front of our car from the world, i.e. we remove the cars in front of us:
-
-[https://youtu.be/tA4a2U7SKSI](https://youtu.be/_r4x2ddXYe4)
-
-In this last video we make a bigger space to be able to park without a car behind. To do this, when looking for a parking space, we remove the car behind:
-
-https://youtu.be/07b0AqKpK5s
-
