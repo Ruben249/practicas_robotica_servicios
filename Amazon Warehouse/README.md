@@ -124,6 +124,6 @@ Once we have navigated to the shelf, the isStateValid function needs to be adjus
 
 
 -Another mistake I had was that when I got to the furthest shelf, when I came back I calculated the route by bypassing the other shelves. For this, I made the shelf bigger so that I couldn't fit through the spaces under the shelves.
-
+To improve this part, I made the robot and the shelf move forward having more or less the same orientation. For that I made that when the robot reached the position of the shelf, it would turn until its orientation was 0, and from then on I do what I explained before.
 
 #### Videos
