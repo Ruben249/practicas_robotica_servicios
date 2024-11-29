@@ -66,6 +66,7 @@ With these results, we see that the map changes x and y:
 
 ### Development
 The practice provides us with the coordinates of the shelves, which are as follows
+```python
 Shelves coordinates = {
     1: (3.728, 0.579),
     2: (3.728, -1.242),
@@ -74,6 +75,7 @@ Shelves coordinates = {
     5: (3.728, -6.781),
     6: (3.728, -8.665),
 }
+```
 ##### Expand the obstacles
 As I explained before, the map is rotated, so the x-values are the y-values and vice versa.
 
@@ -140,3 +142,7 @@ The next step it does is to orientate itself correctly so that it doesn't have t
 https://youtu.be/SyLeT2Gtqw4
 
 In this video we can see how it only calculates one route, since with the applied improvements it calculates it right the first time, making it more computationally efficient. We can also see how when it leaves the shelf, it adds it to the map.
+To draw the rectangle, as always, the x-axis is the y-axis and the y-axis is the x-axis.
+
+[todas_las_estanterias.webm](https://github.com/user-attachments/assets/5c1f3b9e-8d39-4f74-8dd5-3a3f5946eb09)
+
