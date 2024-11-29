@@ -127,3 +127,10 @@ Once we have navigated to the shelf, the isStateValid function needs to be adjus
 To improve this part, I made the robot and the shelf move forward having more or less the same orientation. For that I made that when the robot reached the position of the shelf, it would turn until its orientation was 0, and from then on I do what I explained before.
 
 #### Videos
+
+https://youtu.be/gsgs8BnNizI
+
+In the video we can see how he makes 3 attempts to calculate the path and gets the best one. It then navigates to the coordinate of the implemented path.
+The next step it does is to orientate itself correctly so that it doesn't have to turn around after having taken the shelf. It then picks it up and makes another 3 attempts to calculate the path. Once it does this, it removes the shelf from the map and navigates to the position to leave the shelf, orients itself and leaves the shelf.
+
+Translated with DeepL.com (free version)
