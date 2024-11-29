@@ -144,5 +144,30 @@ https://youtu.be/SyLeT2Gtqw4
 In this video we can see how it only calculates one route, since with the applied improvements it calculates it right the first time, making it more computationally efficient. We can also see how when it leaves the shelf, it adds it to the map.
 To draw the rectangle, as always, the x-axis is the y-axis and the y-axis is the x-axis.
 
-[todas_las_estanterias.webm](https://github.com/user-attachments/assets/5c1f3b9e-8d39-4f74-8dd5-3a3f5946eb09)
+https://youtu.be/JIMy5QOdBG4
 
+In this last video, which is at speed by 4, we see the behaviour of the robot when it has to go for all the shelves, one after the other.
+What it does is to go for one, leave it in an assigned position and then calculate the route to go for another. 
+We can see how the shelves are rotated because when it calculates the path, there is a point that forces it to rotate, so it rotates and the shelves become misaligned.
+Despite this, in the video we can see how he picks them up and leaves them in one point.
+
+Below are the points I have used to pick up and put down the shelves.
+```python
+GOAL_COORDINATES = [
+    (0.579, 3.728),
+    (-1.242, 3.728),
+    (-3.039, 3.728),
+    (-4.827, 3.728),
+    (-6.781, 3.728),
+    (-8.665, 3.728),
+]
+
+BASE_COORDINATES = [
+    (0.25, -3.828),
+    (-3, -3.728),
+    (0, 0),
+    (-1.7, 0),
+    (-3.8, 0),
+    (-6.781, 0),
+]
+```
