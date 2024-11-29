@@ -135,3 +135,8 @@ To improve this part, I made the robot and the shelf move forward having more or
 
 In the video we can see how he makes 3 attempts to calculate the path and gets the best one. It then navigates to the coordinate of the implemented path.
 The next step it does is to orientate itself correctly so that it doesn't have to turn around after having taken the shelf. It then picks it up and makes another 3 attempts to calculate the path. Once it does this, it removes the shelf from the map and navigates to the position to leave the shelf, orients itself and leaves the shelf.
+
+
+https://youtu.be/SyLeT2Gtqw4
+
+In this video we can see how it only calculates one route, since with the applied improvements it calculates it right the first time, making it more computationally efficient. We can also see how when it leaves the shelf, it adds it to the map.
