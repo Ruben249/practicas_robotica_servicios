@@ -126,11 +126,12 @@ Once we have navigated to the shelf, the isStateValid function needs to be adjus
 -Another mistake I had was that when I got to the furthest shelf, when I came back I calculated the route by bypassing the other shelves. For this, I made the shelf bigger so that I couldn't fit through the spaces under the shelves.
 To improve this part, I made the robot and the shelf move forward having more or less the same orientation. For that I made that when the robot reached the position of the shelf, it would turn until its orientation was 0, and from then on I do what I explained before.
 
-#### Videos
+-Another bug I had in the navigation part was that it sometimes crashed, and I realised it was because it was following the path, but a bit off on the x-axis of the map, so to correct it I simply had to adjust it by hand.
+ I also did other tests, like changing the widening factor of the obstacles and changing the dimensions of the robot and the shelf until it was safe to navigate without the risk of crashing.
 
-https://youtu.be/gsgs8BnNizI
+
+#### Videos
+[https://youtu.be/gsgs8BnNizI](https://youtu.be/hy7GcNt-Bvw)
 
 In the video we can see how he makes 3 attempts to calculate the path and gets the best one. It then navigates to the coordinate of the implemented path.
 The next step it does is to orientate itself correctly so that it doesn't have to turn around after having taken the shelf. It then picks it up and makes another 3 attempts to calculate the path. Once it does this, it removes the shelf from the map and navigates to the position to leave the shelf, orients itself and leaves the shelf.
-
-Translated with DeepL.com (free version)
