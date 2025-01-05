@@ -86,5 +86,11 @@ yaw_fused = math.atan2(
 )
 ```
 
-
 #### Errors
+##### 1. Defining Matrices Incorrectly
+Initially, the intrinsic camera matrix and transformation matrices lacked proper dimensions and alignment. This caused issues in solving the **Perspective-n-Point (PnP)** problem, as the inputs were not consistent with the expected format. Debugging these definitions was crucial for accurately determining the pose.
+
+##### 
+
+
+#### Video
