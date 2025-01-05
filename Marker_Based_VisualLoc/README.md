@@ -87,10 +87,13 @@ yaw_fused = math.atan2(
 ```
 
 #### Errors
-##### 1. Defining Matrices Incorrectly
-Initially, the intrinsic camera matrix and transformation matrices lacked proper dimensions and alignment. This caused issues in solving the **Perspective-n-Point (PnP)** problem, as the inputs were not consistent with the expected format. Debugging these definitions was crucial for accurately determining the pose.
 
-##### 
+-Initially, the intrinsic camera matrix and transformation matrices lacked proper dimensions and alignment. This caused issues in solving the **Perspective-n-Point (PnP)** problem, as the inputs were not consistent with the expected format. Debugging these definitions was crucial for accurately determining the pose.
 
+- One problem to take into account is that when we do not detect any airtag, we have to use odometry to know where we are, making the difference between the point where we were before and where we are now.
+
+-Another problem was that at the beginning it did not calculate the orientation properly, so I had to add pi/2 to it.
+
+-
 
 #### Video
