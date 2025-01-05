@@ -38,3 +38,53 @@ matrix_camera_to_robot = np.array([
     [0, 0, 1, -0.107],
     [0, 0, 0, 1]
 ])
+```
+##### Pseudo-random Navigation
+
+A simple navigation mechanism was implemented, allowing the robot to move forward and rotate randomly, exploring the environment:
+```python
+def random_navigation():
+    HAL.setV(0.2)  # Constant linear speed
+    random_angular_velocity = random.uniform(-1.0, 1.0)  # Random angular speed
+    HAL.setW(random_angular_velocity)
+```
+#### Development
+The primary development focused on improving the calculation of the robot's estimated pose using detected AprilTags.
+##### 1. Detecting AprilTags
+
+The pyapriltags library was used to detect markers in the image captured by the camera. Detection provides the marker's corners, its center, and its unique identifier.
+```python
+results = detector.detect(gray)  # AprilTags detection
+```
+
+##### 2. Calculating the Robot’s Position
+
+Using the detected corners, we solved the Perspective-n-Point (PnP) problem to determine the transformation between the marker and the camera. This enabled calculating the robot's position in the world.
+```python
+success, rvec, tvec = cv2.solvePnP(
+    object_points, image_points, matrix_camera, dist_coeffs,
+    flags=cv2.SOLVEPNP_IPPE_SQUARE
+)
+```
+By combining transformations from the world to the marker and from the marker to the camera, the robot's position and orientation in the space were calculated.
+```python
+world_to_robot = np.matmul(np.matmul(world_to_marker, marker_to_camera), matrix_camera_to_robot)
+x = world_to_robot[0, 3]
+y = world_to_robot[1, 3]
+```
+##### 3. Fusion of Multiple Markers
+
+When multiple markers were visible, the system fused their individual estimations. A weight inversely proportional to the distance to the marker was assigned, prioritizing closer markers for more accurate calculations.
+```python3
+# Fusing multiple detections
+total_weight = sum(p[3] for p in poses)
+x_fused = sum(p[0] * p[3] for p in poses) / total_weight
+y_fused = sum(p[1] * p[3] for p in poses) / total_weight
+yaw_fused = math.atan2(
+    sum(math.sin(p[2]) * p[3] for p in poses) / total_weight,
+    sum(math.cos(p[2]) * p[3] for p in poses) / total_weight
+)
+```
+
+
+#### Errors
