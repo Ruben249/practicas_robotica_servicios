@@ -96,4 +96,8 @@ yaw_fused = math.atan2(
 
 -One thing I have implemented is to add more weight to the nearest tag to be used to calculate the position, as when it detected more than one it got worse.
 
+-The most important thing is to correctly calculate the position of the robot based on where it detects tags. To do this, I use several transformations between coordinate frames. The `matrix_camera_to_robot` matrix represents the transformation from the camera to the robot, as the camera is not located at the robot's center. The `world_to_marker` matrix is derived from the known position of the markers in the environment, defined in the configuration file. Finally, the `marker_to_camera` matrix is calculated using the **PnP** algorithm, based on the detected corners of the marker in the image. By multiplying these matrices in sequence, we obtain the robot's position and orientation in the world, contained in the `world_to_robot` matrix.
+
 #### Video
+
+[Video](https://youtu.be/WiRqFjLnOiQ)
