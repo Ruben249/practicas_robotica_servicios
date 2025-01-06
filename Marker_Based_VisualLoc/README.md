@@ -94,6 +94,6 @@ yaw_fused = math.atan2(
 
 -Another problem was that at the beginning it did not calculate the orientation properly, so I had to add pi/2 to it.
 
--
+-One thing I have implemented is to add more weight to the nearest tag to be used to calculate the position, as when it detected more than one it got worse.
 
 #### Video
