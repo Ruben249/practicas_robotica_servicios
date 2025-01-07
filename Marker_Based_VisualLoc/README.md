@@ -88,16 +88,16 @@ yaw_fused = math.atan2(
 
 #### Errors
 
--Initially, the intrinsic camera matrix and transformation matrices lacked proper dimensions and alignment. This caused issues in solving the **Perspective-n-Point (PnP)** problem, as the inputs were not consistent with the expected format. Debugging these definitions was crucial for accurately determining the pose.
+- Initially, the intrinsic camera matrix and transformation matrices lacked proper dimensions and alignment. This caused issues in solving the **Perspective-n-Point (PnP)** problem, as the inputs were not consistent with the expected format. Debugging these definitions was crucial for accurately determining the pose.
 
 - One problem to take into account is that when we do not detect any airtag, we have to use odometry to know where we are, making the difference between the point where we were before and where we are now.
 
--Another problem was that at the beginning it did not calculate the orientation properly, so I had to add pi/2 to it.
+- Another problem was that at the beginning it did not calculate the orientation properly, so I had to add pi/2 to it.
 
--One thing I have implemented is to add more weight to the nearest tag to be used to calculate the position, as when it detected more than one it got worse.
+- One thing I have implemented is to add more weight to the nearest tag to be used to calculate the position, as when it detected more than one it got worse.
 
 -The most important thing is to correctly calculate the position of the robot based on where it detects tags. To do this, I use several transformations between coordinate frames. The `matrix_camera_to_robot` matrix represents the transformation from the camera to the robot, as the camera is not located at the robot's center. The `world_to_marker` matrix is derived from the known position of the markers in the environment, defined in the configuration file. Finally, the `marker_to_camera` matrix is calculated using the **PnP** algorithm, based on the detected corners of the marker in the image. By multiplying these matrices in sequence, we obtain the robot's position and orientation in the world, contained in the `world_to_robot` matrix.
 
 #### Video
 
-[Video](https://youtu.be/WiRqFjLnOiQ)
+[Video](https://youtu.be/zX1vWyXBx9U)
