@@ -44,8 +44,10 @@ matrix_camera_to_robot = np.array([
 A simple navigation mechanism was implemented, allowing the robot to move forward and rotate randomly, exploring the environment:
 ```python
 def random_navigation():
-    HAL.setV(0.2)  # Constant linear speed
-    random_angular_velocity = random.uniform(-1.0, 1.0)  # Random angular speed
+    """random_navigation: Move the robot with random linear and angular velocities."""
+    random_linear_velocity = random.uniform(0.1, 0.5)
+    HAL.setV(random_linear_velocity)
+    random_angular_velocity = random.uniform(-2.0, 2.0)
     HAL.setW(random_angular_velocity)
 ```
 #### Development
