@@ -94,6 +94,7 @@ As you can see in the photo, when I calculate the path there are some places tha
 
 
 #### Video 
-Here is a video where we briefly see how the robot behaves.
+This is the video of the robot's behaviour before making the obstacles smaller. It is at speed x3.5
 [Video1]([https://github.com/Ruben249/practicas_robotica_movil/assets/102288264/2c9a9c66-92af-472b-bf55-7fa6d0fcbe95](https://youtu.be/PlmgJyPVkKU))
+After several recordings, I have put the longest one, because after 35 minutes the computer starts to go worse and the video cuts and affects the execution of the code.
 
