@@ -106,3 +106,4 @@ After several recordings, I have put the longest one, because after 35 minutes t
 [Video2](https://youtu.be/E3tyeOqsLvs)
 
 In this video, we see the behaviour of the robot with changes in the expansion of obstacles. We can see how the robot is able to approach the edges, but it takes much longer. The video is actually 1 hour and 15 minutes long, but I have sped up the time. There is no video of him cleaning the whole house because after the time I said, the computer started to crash.
+You can also see how the video doesn't show the whole map. That's my mistake, but if you look at the gazebo world, you can see where it happens.
