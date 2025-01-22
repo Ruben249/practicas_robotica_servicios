@@ -90,8 +90,12 @@ As you can see in the photo, when I calculate the path there are some places tha
 
 -Another problem I had was that when calculating the path, it kept overwriting itself when doing the backtrackin, so in the end it detected that I had already finished navigating. By changing this, every time I had to do the backtracking to another point, it started to navigate. To solve these problems, I created a ‘security’ array with which I saved the whole path every time I did bactracking.
 
+-The last problem I had was that when navigating, the robot would crash into obstacles. To solve this problem, I decided to create a function that checks the points that are close to an obstacle and makes them unnavigable. After this I had to adjust the erode kernel so that it doesn't convert so many cells directly into obstacles.
+
+![Screenshot from 2025-01-22 16-28-30](https://github.com/user-attachments/assets/281f6176-24d7-41e0-9795-16fe141d2a3c)
+
 
 #### Video 
-Here is a video where we briefly see how the car behaves.
-[FollowLine_Simple.webm](https://github.com/Ruben249/practicas_robotica_movil/assets/102288264/2c9a9c66-92af-472b-bf55-7fa6d0fcbe95)
+Here is a video where we briefly see how the robot behaves.
+[Video1]([https://github.com/Ruben249/practicas_robotica_movil/assets/102288264/2c9a9c66-92af-472b-bf55-7fa6d0fcbe95](https://youtu.be/PlmgJyPVkKU))
 
