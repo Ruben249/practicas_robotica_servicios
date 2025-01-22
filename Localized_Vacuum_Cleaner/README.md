@@ -7,9 +7,7 @@
 
 -[Start](#start)
 
-
 -[Development](#development)
-
 
 -[Errors](#errors)
 
